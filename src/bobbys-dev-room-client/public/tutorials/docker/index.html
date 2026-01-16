@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Tutorial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-code: #1a1f26;
+            --docker-blue: #2496ed;
+            --docker-blue-light: #52b0f5;
+            --accent-green: #3fb950;
+            --accent-red: #f85149;
+            --accent-yellow: #d29922;
+            --accent-purple: #a371f7;
+            --accent-cyan: #56d4dd;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+            --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html { font-size: 16px; scroll-behavior: smooth; }
+        
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        
+        .tutorial-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tutorial-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .docker-icon {
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .logo h1 {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--docker-blue);
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--docker-blue), var(--accent-cyan));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .part-indicator {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        
+        .parts-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+        
+        .part-dot {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .part-dot:hover {
+            color: var(--docker-blue);
+            border-color: var(--docker-blue);
+            transform: translateY(-2px);
+        }
+        
+        .part-dot.active {
+            background: var(--docker-blue);
+            color: white;
+            border-color: var(--docker-blue);
+            box-shadow: 0 0 20px rgba(36, 150, 237, 0.3);
+        }
+        
+        .part-dot.completed {
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+        
+        .tutorial-content {
+            flex: 1;
+            padding: 3rem 2rem;
+        }
+        
+        .part-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .part-number {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--docker-blue);
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            border: 1px solid var(--docker-blue);
+            margin-right: 1rem;
+        }
+        
+        .content-body h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--docker-blue-light);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            border-left: 4px solid var(--docker-blue);
+        }
+        
+        .content-body h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .content-body p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+        
+        .content-body ul, .content-body ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+        
+        .content-body li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .content-body strong { color: var(--text-primary); font-weight: 600; }
+        
+        .content-body code {
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            background: var(--bg-tertiary);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            color: var(--accent-cyan);
+            border: 1px solid var(--border-color);
+        }
+        
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: '● ● ●';
+            display: block;
+            padding: 8px 12px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+        }
+        
+        .code-block pre {
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 0;
+        }
+        
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            background: none;
+            padding: 0;
+            border: none;
+            color: var(--text-primary);
+        }
+        
+        .code-block.good { border-color: var(--accent-green); border-left: 4px solid var(--accent-green); }
+        .code-block.bad { border-color: var(--accent-red); border-left: 4px solid var(--accent-red); }
+        
+        .diagram {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        
+        .diagram pre {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: var(--accent-cyan);
+            margin: 0;
+            white-space: pre;
+        }
+        
+        .comparison-table { margin: 1.5rem 0; overflow-x: auto; }
+        
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        
+        .comparison-table th {
+            background: var(--bg-tertiary);
+            color: var(--docker-blue-light);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .comparison-table td {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        
+        .comparison-table tr:nth-child(even) { background: var(--bg-secondary); }
+        
+        .interview-tip {
+            background: linear-gradient(135deg, rgba(36, 150, 237, 0.1), rgba(86, 212, 221, 0.1));
+            border: 1px solid var(--docker-blue);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .interview-tip h4 {
+            color: var(--docker-blue-light);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .interview-tip p {
+            font-style: italic;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.8;
+        }
+        
+        .qa-block {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent-purple);
+        }
+        
+        .qa-block h4 { color: var(--accent-purple); margin-top: 0; margin-bottom: 1rem; }
+        
+        .qa-block blockquote {
+            margin: 0;
+            padding: 0;
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        .tutorial-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            min-width: 150px;
+        }
+        
+        .nav-btn:hover {
+            border-color: var(--docker-blue);
+            background: var(--bg-secondary);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .nav-btn .arrow {
+            font-size: 1.5rem;
+            color: var(--docker-blue);
+            margin-bottom: 0.25rem;
+        }
+        
+        .nav-btn .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .next-btn { align-items: flex-end; text-align: right; }
+        
+        .keyboard-hints {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        
+        .keyboard-hints kbd {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            margin: 0 0.2rem;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--docker-blue); }
+        
+        ::selection { background: var(--docker-blue); color: white; }
+        
+        @media (max-width: 768px) {
+            .tutorial-header { flex-wrap: wrap; padding: 1rem; gap: 1rem; }
+            .progress-bar { order: 3; width: 100%; }
+            .parts-nav { padding: 0.75rem; gap: 0.25rem; }
+            .part-dot { width: 30px; height: 30px; font-size: 0.7rem; }
+            .tutorial-content { padding: 1.5rem 1rem; }
+            .part-title { font-size: 1.5rem; }
+            .tutorial-nav { flex-direction: column; gap: 0.75rem; }
+            .nav-btn { width: 100%; min-width: auto; }
+            .next-btn { order: -1; }
+            .keyboard-hints { display: none; }
+            .diagram pre { font-size: 0.65rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="tutorial-container">
+        <header class="tutorial-header">
+            <div class="logo">
+                <span class="docker-icon">🐳</span>
+                <h1>Docker Tutorial</h1>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="part-indicator" id="partIndicator">Part 1 of 15</div>
+        </header>
+
+        <nav class="parts-nav" id="partsNav"></nav>
+
+        <main class="tutorial-content">
+            <h2 class="part-title" id="partTitle"></h2>
+            <div class="content-body" id="contentBody"></div>
+        </main>
+
+        <footer class="tutorial-nav">
+            <button class="nav-btn prev-btn" id="prevBtn" onclick="navigate(-1)">
+                <span class="arrow">←</span>
+                <span class="label">Previous</span>
+            </button>
+            <div class="keyboard-hints">
+                Use <kbd>←</kbd> <kbd>→</kbd> arrow keys to navigate
+            </div>
+            <button class="nav-btn next-btn" id="nextBtn" onclick="navigate(1)">
+                <span class="label">Next</span>
+                <span class="arrow">→</span>
+            </button>
+        </footer>
+    </div>
+
+    <script>
+        const tutorials = [
+            {
+                title: "The Foundation — What Problem Does Docker Solve?",
+                content: `
+<h3>The Problem Before Docker</h3>
+<p>Imagine you're a .NET developer and you build an application on your MacBook. It works perfectly. Then you deploy it to a Linux server and... it breaks. Different OS, different installed dependencies, different configurations.</p>
+<p>Or imagine you join a new team. "Just clone the repo and run it," they say. Three hours later you're still installing SQL Server, configuring environment variables, and wondering why Node.js 18 conflicts with something else on your machine.</p>
+<p>This is called the <strong>"it works on my machine"</strong> problem.</p>
+
+<h3>What Docker Actually Is</h3>
+<p>Docker is a platform that packages your application AND its entire environment into a portable unit called a <strong>container</strong>.</p>
+
+<div class="comparison-table">
+<table>
+<tr><th>Concept</th><th>Analogy</th></tr>
+<tr><td><strong>Without Docker</strong></td><td>Shipping furniture unassembled with instructions in Swedish</td></tr>
+<tr><td><strong>With Docker</strong></td><td>Shipping a fully furnished room that works identically everywhere</td></tr>
+</table>
+</div>
+
+<p>A Docker container includes:</p>
+<ul>
+<li>Your application code</li>
+<li>Runtime (like .NET 8)</li>
+<li>System tools and libraries</li>
+<li>Configuration files</li>
+<li>Environment variables</li>
+</ul>
+
+<h3>Containers vs. Virtual Machines</h3>
+<p>You might think, "Isn't this just a virtual machine?" Not quite.</p>
+
+<div class="diagram">
+<pre>
+VIRTUAL MACHINES                         CONTAINERS
+┌─────────┐ ┌─────────┐ ┌─────────┐     ┌─────────┐ ┌─────────┐ ┌─────────┐
+│  App A  │ │  App B  │ │  App C  │     │  App A  │ │  App B  │ │  App C  │
+├─────────┤ ├─────────┤ ├─────────┤     ├─────────┤ ├─────────┤ ├─────────┤
+│Bins/Libs│ │Bins/Libs│ │Bins/Libs│     │Bins/Libs│ │Bins/Libs│ │Bins/Libs│
+├─────────┤ ├─────────┤ ├─────────┤     └─────────┴─┴─────────┴─┴─────────┘
+│Guest OS │ │Guest OS │ │Guest OS │     ┌─────────────────────────────────┐
+│ (HEAVY) │ │ (HEAVY) │ │ (HEAVY) │     │        DOCKER ENGINE            │
+└─────────┴─┴─────────┴─┴─────────┘     └─────────────────────────────────┘
+┌─────────────────────────────────┐     ┌─────────────────────────────────┐
+│          HYPERVISOR             │     │           HOST OS               │
+└─────────────────────────────────┘     └─────────────────────────────────┘
+</pre>
+</div>
+
+<div class="comparison-table">
+<table>
+<tr><th>Aspect</th><th>Virtual Machine</th><th>Container</th></tr>
+<tr><td>Boot time</td><td>Minutes</td><td>Seconds</td></tr>
+<tr><td>Size</td><td>Gigabytes</td><td>Megabytes</td></tr>
+<tr><td>OS</td><td>Full guest OS per VM</td><td>Shares host OS kernel</td></tr>
+<tr><td>Isolation</td><td>Complete hardware isolation</td><td>Process-level isolation</td></tr>
+<tr><td>Resource usage</td><td>Heavy</td><td>Lightweight</td></tr>
+</table>
+</div>
+
+<div class="interview-tip">
+<h4>💡 Interview Explanation</h4>
+<p>"Containers share the host OS kernel, while VMs each have their own full operating system. This makes containers much lighter and faster to start—we're talking seconds versus minutes. The tradeoff is that containers provide process-level isolation rather than complete hardware isolation."</p>
+</div>
+`
+            },
+            {
+                title: "Core Concepts",
+                content: `
+<h3>The Three Pillars of Docker</h3>
+
+<div class="diagram">
+<pre>
+┌─────────────────────────────────────────────────────────┐
+│                                                         │
+│   DOCKERFILE ──builds──▶ IMAGE ──runs──▶ CONTAINER     │
+│   (Recipe)              (Template)       (Running App)  │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+</pre>
+</div>
+
+<h4>1. Dockerfile (The Recipe)</h4>
+<p>A text file with instructions for building an image. Like a recipe that says "start with Ubuntu, add .NET, copy my code, run this command."</p>
+
+<div class="code-block">
+<pre><code># Example Dockerfile for a .NET API
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY ./publish .
+EXPOSE 80
+ENTRYPOINT ["dotnet", "MyApi.dll"]</code></pre>
+</div>
+
+<h4>2. Image (The Template)</h4>
+<p>The result of building a Dockerfile. It's a read-only template containing your application and all its dependencies. Think of it like a class in OOP—it defines what something is, but isn't a running instance.</p>
+
+<p>Images are:</p>
+<ul>
+<li><strong>Immutable</strong> (never change once built)</li>
+<li><strong>Layered</strong> (each instruction creates a layer)</li>
+<li><strong>Shareable</strong> (push to Docker Hub, pull anywhere)</li>
+</ul>
+
+<h4>3. Container (The Running Instance)</h4>
+<p>A running instance of an image. Like an object instantiated from a class. You can run multiple containers from the same image.</p>
+
+<div class="diagram">
+<pre>
+One Image → Many Containers
+
+┌──────────────┐
+│  my-api:v1   │ (Image)
+└──────┬───────┘
+       │
+       ├──▶ Container 1 (port 8080)
+       ├──▶ Container 2 (port 8081)
+       └──▶ Container 3 (port 8082)
+</pre>
+</div>
+
+<h3>Docker Hub and Registries</h3>
+<p><strong>Docker Hub</strong> is like npm or NuGet, but for Docker images. Microsoft publishes official .NET images there:</p>
+
+<ul>
+<li><code>mcr.microsoft.com/dotnet/sdk:8.0</code> — For building .NET apps</li>
+<li><code>mcr.microsoft.com/dotnet/aspnet:8.0</code> — For running .NET apps</li>
+<li><code>mcr.microsoft.com/mssql/server:2022-latest</code> — SQL Server</li>
+</ul>
+`
+            },
+            {
+                title: "Essential Commands",
+                content: `
+<h3>Your Daily Driver Commands</h3>
+
+<div class="code-block">
+<pre><code># ═══════════════════════════════════════════════════════════
+# IMAGES
+# ═══════════════════════════════════════════════════════════
+
+# Pull an image from Docker Hub
+docker pull mcr.microsoft.com/dotnet/sdk:8.0
+
+# List all images on your machine
+docker images
+
+# Remove an image
+docker rmi &lt;image-name-or-id&gt;
+
+# Build an image from a Dockerfile
+docker build -t my-app:v1 .
+#          └─ tag name     └─ context (current directory)</code></pre>
+</div>
+
+<div class="code-block">
+<pre><code># ═══════════════════════════════════════════════════════════
+# CONTAINERS
+# ═══════════════════════════════════════════════════════════
+
+# Run a container (creates and starts)
+docker run &lt;image-name&gt;
+
+# Run with common options
+docker run -d -p 8080:80 --name my-container my-app:v1
+#          │  │          │
+#          │  │          └─ give it a friendly name
+#          │  └─ map host:container ports
+#          └─ detached mode (run in background)
+
+# List running containers
+docker ps
+
+# List ALL containers (including stopped)
+docker ps -a
+
+# Stop a container
+docker stop &lt;container-name-or-id&gt;
+
+# Start a stopped container
+docker start &lt;container-name-or-id&gt;
+
+# View container logs
+docker logs &lt;container-name-or-id&gt;
+docker logs -f &lt;container-name-or-id&gt;  # follow (like tail -f)
+
+# Execute a command inside a running container
+docker exec -it &lt;container-name&gt; bash
+#           └─ interactive + tty (gives you a terminal)</code></pre>
+</div>
+
+<h3>Understanding Port Mapping</h3>
+
+<div class="code-block">
+<pre><code>docker run -p 8080:80 my-app</code></pre>
+</div>
+
+<div class="diagram">
+<pre>
+┌─────────────────────────────────────────────────────────┐
+│  YOUR MACHINE                                           │
+│                                                         │
+│   Browser ──▶ localhost:8080                           │
+│                    │                                    │
+│                    ▼                                    │
+│   ┌─────────────────────────────────────┐              │
+│   │  DOCKER CONTAINER                   │              │
+│   │                                     │              │
+│   │   Port 8080 ──mapped──▶ Port 80    │              │
+│   │   (host)                (container) │              │
+│   │                              │      │              │
+│   │                              ▼      │              │
+│   │                         [Your App]  │              │
+│   └─────────────────────────────────────┘              │
+└─────────────────────────────────────────────────────────┘
+</pre>
+</div>
+
+<p>The format is always <code>HOST:CONTAINER</code>. Your machine's port 8080 routes to the container's port 80.</p>
+
+<h3>Quick Reference Card</h3>
+
+<div class="diagram">
+<pre>
+┌──────────────────────────────────────────────────────────────┐
+│  DOCKER COMMAND CHEAT SHEET                                  │
+├──────────────────────────────────────────────────────────────┤
+│  LIFECYCLE:                                                  │
+│    docker run      Create + start container                  │
+│    docker start    Start stopped container                   │
+│    docker stop     Stop running container                    │
+│    docker rm       Delete container                          │
+│                                                              │
+│  INSPECTION:                                                 │
+│    docker ps       List running containers                   │
+│    docker ps -a    List ALL containers                       │
+│    docker logs     View container output                     │
+│    docker inspect  Detailed container info (JSON)            │
+│                                                              │
+│  IMAGES:                                                     │
+│    docker build    Build image from Dockerfile               │
+│    docker pull     Download image from registry              │
+│    docker push     Upload image to registry                  │
+│    docker images   List local images                         │
+└──────────────────────────────────────────────────────────────┘
+</pre>
+</div>
+`
+            },
+            {
+                title: "Writing Dockerfiles",
+                content: `
+<h3>Basic Structure</h3>
+
+<div class="code-block">
+<pre><code># Start from a base image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy files from your machine into the container
+COPY ./publish .
+
+# Expose a port (documentation, doesn't actually publish)
+EXPOSE 80
+
+# Set environment variables
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+# The command that runs when the container starts
+ENTRYPOINT ["dotnet", "MyApi.dll"]</code></pre>
+</div>
+
+<h3>Dockerfile Instructions Reference</h3>
+
+<div class="comparison-table">
+<table>
+<tr><th>Instruction</th><th>Purpose</th><th>Example</th></tr>
+<tr><td><code>FROM</code></td><td>Base image to start from</td><td><code>FROM ubuntu:22.04</code></td></tr>
+<tr><td><code>WORKDIR</code></td><td>Set working directory</td><td><code>WORKDIR /app</code></td></tr>
+<tr><td><code>COPY</code></td><td>Copy files from host to container</td><td><code>COPY . .</code></td></tr>
+<tr><td><code>RUN</code></td><td>Execute command during build</td><td><code>RUN apt-get update</code></td></tr>
+<tr><td><code>ENV</code></td><td>Set environment variable</td><td><code>ENV NODE_ENV=production</code></td></tr>
+<tr><td><code>EXPOSE</code></td><td>Document which port the app uses</td><td><code>EXPOSE 8080</code></td></tr>
+<tr><td><code>CMD</code></td><td>Default command (can be overridden)</td><td><code>CMD ["npm", "start"]</code></td></tr>
+<tr><td><code>ENTRYPOINT</code></td><td>Main command (harder to override)</td><td><code>ENTRYPOINT ["dotnet", "app.dll"]</code></td></tr>
+</table>
+</div>
+
+<h3>CMD vs ENTRYPOINT</h3>
+<p>This confuses everyone at first:</p>
+
+<div class="code-block">
+<pre><code># CMD: "Here's the default, but feel free to change it"
+CMD ["npm", "start"]
+# Can be overridden: docker run my-app npm test
+
+# ENTRYPOINT: "This is THE command, you can only add arguments"
+ENTRYPOINT ["dotnet", "MyApi.dll"]
+# Can only append: docker run my-app --urls=http://0.0.0.0:5000</code></pre>
+</div>
+
+<h3>Real-World .NET Dockerfile</h3>
+
+<div class="code-block">
+<pre><code># Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["MyApi/MyApi.csproj", "MyApi/"]
+RUN dotnet restore "MyApi/MyApi.csproj"
+COPY . .
+WORKDIR "/src/MyApi"
+RUN dotnet build "MyApi.csproj" -c Release -o /app/build
+
+# Stage 2: Publish
+FROM build AS publish
+RUN dotnet publish "MyApi.csproj" -c Release -o /app/publish
+
+# Stage 3: Runtime (final image)
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "MyApi.dll"]</code></pre>
+</div>
+`
+            },
+            {
+                title: "Understanding Layers and Caching",
+                content: `
+<h3>How Layers Work</h3>
+<p>Each instruction in a Dockerfile creates a layer. Layers are cached and reused.</p>
+
+<div class="code-block">
+<pre><code>FROM node:18              # Layer 1: Base image
+WORKDIR /app              # Layer 2: Create directory
+COPY package*.json ./     # Layer 3: Copy package files
+RUN npm install           # Layer 4: Install dependencies
+COPY . .                  # Layer 5: Copy source code
+CMD ["npm", "start"]      # Layer 6: Set start command</code></pre>
+</div>
+
+<div class="diagram">
+<pre>
+┌─────────────────────────────────────┐
+│  Layer 6: CMD                       │  ← Top (smallest)
+├─────────────────────────────────────┤
+│  Layer 5: Source code               │
+├─────────────────────────────────────┤
+│  Layer 4: node_modules (HUGE)       │  ← Cached if unchanged!
+├─────────────────────────────────────┤
+│  Layer 3: package.json              │
+├─────────────────────────────────────┤
+│  Layer 2: WORKDIR                   │
+├─────────────────────────────────────┤
+│  Layer 1: node:18 base              │  ← Bottom (largest)
+└─────────────────────────────────────┘
+</pre>
+</div>
+
+<h3>Why Order Matters</h3>
+<p>Docker caches layers. If a layer changes, all layers AFTER it are rebuilt.</p>
+
+<h4>❌ Bad Dockerfile:</h4>
+<div class="code-block bad">
+<pre><code>FROM node:18
+WORKDIR /app
+COPY . .                  # Source code changes often
+RUN npm install           # This runs EVERY time code changes!
+CMD ["npm", "start"]</code></pre>
+</div>
+
+<h4>✅ Good Dockerfile:</h4>
+<div class="code-block good">
+<pre><code>FROM node:18
+WORKDIR /app
+COPY package*.json ./     # Rarely changes
+RUN npm install           # Only runs when packages change
+COPY . .                  # Source changes don't trigger npm install
+CMD ["npm", "start"]</code></pre>
+</div>
+
+<div class="interview-tip">
+<h4>💡 Interview Explanation</h4>
+<p>"Docker uses a layered filesystem with caching. Each Dockerfile instruction creates a layer, and if nothing has changed in that layer or the ones before it, Docker uses the cached version. That's why I always copy package.json separately from the source code—I don't want to reinstall all my dependencies every time I change a line of code."</p>
+</div>
+`
+            },
+            {
+                title: "Volumes — Persistent Data",
+                content: `
+<h3>The Problem</h3>
+<p>Containers are ephemeral. When you remove a container, its data is gone.</p>
+
+<div class="code-block bad">
+<pre><code># Start SQL Server
+docker run -d --name sql-server mcr.microsoft.com/mssql/server:2022-latest
+
+# Create databases, add data...
+
+# Remove container
+docker rm -f sql-server
+
+# 💀 ALL DATA IS GONE</code></pre>
+</div>
+
+<h3>The Solution: Volumes</h3>
+<p>Volumes store data outside the container's filesystem.</p>
+
+<div class="code-block good">
+<pre><code># Create a named volume
+docker volume create sql-data
+
+# Run SQL Server with volume mounted
+docker run -d \\
+  --name sql-server \\
+  -v sql-data:/var/opt/mssql \\
+  mcr.microsoft.com/mssql/server:2022-latest
+
+# Now data persists even if you remove the container!
+docker rm -f sql-server
+
+# Start new container with same volume
+docker run -d \\
+  --name sql-server-new \\
+  -v sql-data:/var/opt/mssql \\
+  mcr.microsoft.com/mssql/server:2022-latest
+
+# ✅ Data is still there!</code></pre>
+</div>
+
+<h3>Three Types of Mounts</h3>
+
+<div class="diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│  1. VOLUMES (Docker-managed)                                    │
+│     docker run -v my-volume:/app/data                          │
+│     • Stored in Docker's area (/var/lib/docker/volumes/)        │
+│     • Best for production data                                  │
+│                                                                 │
+│  2. BIND MOUNTS (Host directory)                                │
+│     docker run -v /path/on/host:/app/data                      │
+│     • Maps host directory into container                        │
+│     • Great for development (live code reloading)               │
+│                                                                 │
+│  3. TMPFS (Memory only)                                         │
+│     docker run --tmpfs /app/temp                               │
+│     • Stored in host memory                                     │
+│     • Fast but not persistent                                   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+</pre>
+</div>
+
+<h3>Volume Commands</h3>
+
+<div class="code-block">
+<pre><code># List volumes
+docker volume ls
+
+# Create a volume
+docker volume create my-data
+
+# Inspect a volume (see where it's stored)
+docker volume inspect my-data
+
+# Remove a volume
+docker volume rm my-data
+
+# Remove all unused volumes
+docker volume prune</code></pre>
+</div>
+`
+            },
+            {
+                title: "Networking",
+                content: `
+<h3>Default Networks</h3>
+<p>Docker creates three networks automatically:</p>
+
+<div class="code-block">
+<pre><code>docker network ls
+# NETWORK ID     NAME      DRIVER    SCOPE
+# abc123         bridge    bridge    local   ← Default for containers
+# def456         host      host      local   ← Use host's network directly
+# ghi789         none      null      local   ← No networking</code></pre>
+</div>
+
+<h3>Container Communication</h3>
+<p>By default, containers on the same network can communicate using container names as hostnames:</p>
+
+<div class="code-block">
+<pre><code># Create a network
+docker network create my-app-network
+
+# Start database
+docker run -d \\
+  --name postgres \\
+  --network my-app-network \\
+  postgres:15
+
+# Start API (can reach postgres by name!)
+docker run -d \\
+  --name my-api \\
+  --network my-app-network \\
+  -e "ConnectionString=Host=postgres;Database=mydb" \\
+  my-api-image
+
+# Inside my-api container, "postgres" resolves to the database container</code></pre>
+</div>
+
+<div class="diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────┐
+│  my-app-network                                             │
+│                                                             │
+│   ┌─────────────┐         ┌─────────────┐                  │
+│   │  postgres   │◄────────│   my-api    │                  │
+│   │  (db)       │  DNS:   │   (app)     │                  │
+│   │             │ postgres│             │                  │
+│   └─────────────┘         └─────────────┘                  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+</pre>
+</div>
+
+<h3>Network Commands</h3>
+
+<div class="code-block">
+<pre><code># Create a network
+docker network create my-network
+
+# List networks
+docker network ls
+
+# Connect a running container to a network
+docker network connect my-network my-container
+
+# Disconnect
+docker network disconnect my-network my-container
+
+# Inspect network (see connected containers)
+docker network inspect my-network
+
+# Remove network
+docker network rm my-network</code></pre>
+</div>
+`
+            },
+            {
+                title: "Docker Compose",
+                content: `
+<h3>The Problem</h3>
+<p>Running multi-container applications with <code>docker run</code> is tedious:</p>
+
+<div class="code-block bad">
+<pre><code># Start database
+docker run -d --name postgres --network app-net -v pg-data:/var/lib/postgresql/data postgres:15
+
+# Start Redis
+docker run -d --name redis --network app-net redis:alpine
+
+# Start API
+docker run -d --name api --network app-net -p 5000:80 my-api
+
+# 😵 And you have to remember all of this...</code></pre>
+</div>
+
+<h3>The Solution: docker-compose.yml</h3>
+
+<div class="code-block good">
+<pre><code># docker-compose.yml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: myapp
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: myappdb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build: ./src/MyApi
+    ports:
+      - "5000:80"
+    environment:
+      - ConnectionStrings__Default=Host=postgres;Database=myappdb
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  postgres-data:</code></pre>
+</div>
+
+<p>Now one command does everything:</p>
+
+<div class="code-block">
+<pre><code># Start all services
+docker compose up
+
+# Start in background
+docker compose up -d
+
+# Stop all services
+docker compose down
+
+# Rebuild images
+docker compose up --build
+
+# View logs
+docker compose logs
+docker compose logs api  # Just one service</code></pre>
+</div>
+
+<h3>Arc Raiders Example</h3>
+
+<div class="code-block">
+<pre><code>version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=ArcRaiders123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+  api:
+    build: ./ArcRaidersApi
+    ports:
+      - "5000:80"
+    environment:
+      - ConnectionStrings__Default=Server=sqlserver;Database=ArcRaidersDB;User=sa;Password=ArcRaiders123!
+    depends_on:
+      - sqlserver
+
+volumes:
+  sqlserver-data:</code></pre>
+</div>
+`
+            },
+            {
+                title: "Multi-Stage Builds",
+                content: `
+<h3>The Problem</h3>
+<p>Build tools make images huge:</p>
+
+<div class="code-block bad">
+<pre><code># BAD: 2GB+ image!
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+WORKDIR /app
+COPY . .
+RUN dotnet publish -c Release -o /app/publish
+ENTRYPOINT ["dotnet", "publish/MyApi.dll"]
+# Includes entire SDK (build tools, compilers, etc.)</code></pre>
+</div>
+
+<h3>The Solution: Multi-Stage Builds</h3>
+
+<div class="code-block good">
+<pre><code># Stage 1: BUILD (heavy image with SDK)
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["MyApi.csproj", "./"]
+RUN dotnet restore
+COPY . .
+RUN dotnet publish -c Release -o /app/publish
+
+# Stage 2: RUNTIME (slim image, no SDK)
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "MyApi.dll"]</code></pre>
+</div>
+
+<div class="diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│  BUILD STAGE (sdk:8.0)          RUNTIME STAGE (aspnet:8.0)  │
+│  ┌─────────────────────┐        ┌─────────────────────┐    │
+│  │ .NET SDK            │        │ .NET Runtime        │    │
+│  │ Compilers           │        │ Published DLLs only │    │
+│  │ Build tools         │───────▶│                     │    │
+│  │ Source code         │ COPY   │ ~200MB              │    │
+│  │ ~2GB                │        │                     │    │
+│  └─────────────────────┘        └─────────────────────┘    │
+│                                                             │
+│  DISCARDED                      FINAL IMAGE                 │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+</pre>
+</div>
+
+<div class="interview-tip">
+<h4>💡 Interview Explanation</h4>
+<p>"Multi-stage builds let you use a full SDK image for building but ship only the runtime. Our .NET API went from 2GB to about 200MB. The build stage is discarded—only the final stage becomes your image."</p>
+</div>
+`
+            },
+            {
+                title: "Security Best Practices",
+                content: `
+<h3>1. Don't Run as Root</h3>
+
+<div class="code-block bad">
+<pre><code># BAD
+FROM node:18
+COPY . .
+CMD ["node", "server.js"]
+# Runs as root by default!</code></pre>
+</div>
+
+<div class="code-block good">
+<pre><code># GOOD
+FROM node:18
+RUN addgroup --system app && adduser --system --group app
+WORKDIR /app
+COPY --chown=app:app . .
+USER app
+CMD ["node", "server.js"]</code></pre>
+</div>
+
+<h3>2. Use Specific Image Tags</h3>
+
+<div class="code-block bad">
+<pre><code># BAD: Could change anytime
+FROM node:latest</code></pre>
+</div>
+
+<div class="code-block good">
+<pre><code># BETTER: Major version
+FROM node:18
+
+# BEST: Exact version
+FROM node:18.19.0-alpine</code></pre>
+</div>
+
+<h3>3. Scan for Vulnerabilities</h3>
+
+<div class="code-block">
+<pre><code># Docker Scout (built-in)
+docker scout cves my-image:latest
+
+# Or use tools like Trivy
+trivy image my-image:latest</code></pre>
+</div>
+
+<h3>4. Don't Store Secrets in Images</h3>
+
+<div class="code-block bad">
+<pre><code># NEVER DO THIS
+ENV DATABASE_PASSWORD=supersecret</code></pre>
+</div>
+
+<div class="code-block good">
+<pre><code># Instead, pass at runtime
+docker run -e DATABASE_PASSWORD=$DB_PASS my-image</code></pre>
+</div>
+
+<h3>5. Use .dockerignore</h3>
+
+<div class="code-block">
+<pre><code># .dockerignore
+.git
+.gitignore
+node_modules
+*.md
+.env
+.env.*
+Dockerfile
+docker-compose.yml
+**/*.log
+**/bin
+**/obj</code></pre>
+</div>
+
+<h3>6. Minimize Layers and Size</h3>
+
+<div class="code-block good">
+<pre><code># GOOD: Combine and clean up
+RUN apt-get update && \\
+    apt-get install -y curl git && \\
+    apt-get clean && \\
+    rm -rf /var/lib/apt/lists/*</code></pre>
+</div>
+`
+            },
+            {
+                title: "Development Workflow",
+                content: `
+<h3>Local Development with Docker</h3>
+
+<div class="code-block">
+<pre><code># docker-compose.dev.yml
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount source code for hot reload
+      - ./src:/app/src
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: devpassword
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"</code></pre>
+</div>
+
+<div class="code-block">
+<pre><code># Dockerfile.dev (with hot reload)
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+WORKDIR /app
+COPY *.csproj .
+RUN dotnet restore
+COPY . .
+ENTRYPOINT ["dotnet", "watch", "run", "--urls=http://0.0.0.0:5000"]</code></pre>
+</div>
+
+<div class="code-block">
+<pre><code># Start development environment
+docker compose -f docker-compose.dev.yml up
+
+# Make changes to code → automatically rebuilds</code></pre>
+</div>
+
+<h3>CI/CD Pipeline Pattern</h3>
+
+<div class="code-block">
+<pre><code># Example: GitHub Actions
+name: Build and Push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t my-app:\${{ github.sha }} .
+
+      - name: Run tests
+        run: docker build --target test -t my-app:test .
+
+      - name: Push to registry
+        run: |
+          docker tag my-app:\${{ github.sha }} myregistry/my-app:latest
+          docker push myregistry/my-app:latest</code></pre>
+</div>
+`
+            },
+            {
+                title: "Common Patterns and Recipes",
+                content: `
+<h3>Pattern 1: Wait for Dependencies</h3>
+
+<div class="code-block">
+<pre><code># docker-compose.yml
+services:
+  api:
+    depends_on:
+      db:
+        condition: service_healthy
+  
+  db:
+    image: postgres:15
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5</code></pre>
+</div>
+
+<h3>Pattern 2: Environment-Specific Configs</h3>
+
+<div class="code-block">
+<pre><code># Base compose file
+docker-compose.yml
+
+# Development overrides
+docker-compose.dev.yml
+
+# Production overrides
+docker-compose.prod.yml
+
+# Run with multiple files
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up</code></pre>
+</div>
+
+<h3>Pattern 3: Database Migrations</h3>
+
+<div class="code-block">
+<pre><code>#!/bin/bash
+# entrypoint.sh
+echo "Running migrations..."
+dotnet MyApi.dll --migrate
+echo "Starting application..."
+exec dotnet MyApi.dll</code></pre>
+</div>
+
+<h3>Pattern 4: Debugging in Container</h3>
+
+<div class="code-block">
+<pre><code># Attach to running container
+docker exec -it my-container bash
+
+# View processes
+docker top my-container
+
+# View resource usage
+docker stats my-container
+
+# Copy files out for inspection
+docker cp my-container:/app/logs ./logs-backup</code></pre>
+</div>
+`
+            },
+            {
+                title: "Troubleshooting Guide",
+                content: `
+<h3>Container Won't Start</h3>
+
+<div class="code-block">
+<pre><code># Check logs
+docker logs my-container
+
+# Check exit code
+docker inspect my-container --format='{{.State.ExitCode}}'
+
+# Common exit codes:
+# 0   = Success (but maybe exited too fast)
+# 1   = Application error
+# 137 = Killed (OOM or manual)
+# 143 = Terminated gracefully</code></pre>
+</div>
+
+<h3>Can't Connect to Container</h3>
+
+<div class="code-block">
+<pre><code># Is it running?
+docker ps
+
+# Check port mappings
+docker port my-container
+
+# Can you reach it from inside?
+docker exec -it my-container curl localhost:80
+
+# Check network
+docker network inspect bridge</code></pre>
+</div>
+
+<h3>Build Failures</h3>
+
+<div class="code-block">
+<pre><code># Build with no cache (start fresh)
+docker build --no-cache -t my-app .
+
+# Build with progress output
+docker build --progress=plain -t my-app .
+
+# Check available disk space
+docker system df</code></pre>
+</div>
+
+<h3>Image Too Large</h3>
+
+<div class="code-block">
+<pre><code># See layer sizes
+docker history my-image
+
+# Find what's taking space
+docker run --rm my-image du -sh /*
+
+# Use dive tool for detailed analysis
+dive my-image</code></pre>
+</div>
+
+<h3>Container Logs Filling Disk</h3>
+
+<div class="code-block">
+<pre><code># Limit log size in compose
+services:
+  my-app:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"</code></pre>
+</div>
+`
+            },
+            {
+                title: "Interview Questions & Answers",
+                content: `
+<h3>Basic Questions</h3>
+
+<div class="qa-block">
+<h4>Q: What is Docker?</h4>
+<blockquote>"Docker is a platform for packaging applications and their dependencies into portable containers. Unlike VMs, containers share the host OS kernel, making them lightweight and fast. I can build an image once and run it identically on my laptop, in CI, and in production."</blockquote>
+</div>
+
+<div class="qa-block">
+<h4>Q: What's the difference between an image and a container?</h4>
+<blockquote>"An image is a read-only template—like a class in OOP. A container is a running instance of that image—like an object. You can run multiple containers from one image, each isolated from the others."</blockquote>
+</div>
+
+<div class="qa-block">
+<h4>Q: How do you persist data in Docker?</h4>
+<blockquote>"Containers are ephemeral, so I use volumes for persistent data. Named volumes are managed by Docker and survive container deletion. For development, I use bind mounts to map host directories into containers for live code reloading."</blockquote>
+</div>
+
+<h3>Intermediate Questions</h3>
+
+<div class="qa-block">
+<h4>Q: Explain Docker layers and caching.</h4>
+<blockquote>"Each Dockerfile instruction creates a cached layer. If nothing changes in a layer or its predecessors, Docker reuses the cache. That's why I structure Dockerfiles to put rarely-changing things first—like copying package.json before source code—so I don't reinstall dependencies on every code change."</blockquote>
+</div>
+
+<div class="qa-block">
+<h4>Q: What are multi-stage builds?</h4>
+<blockquote>"Multi-stage builds let you use multiple FROM statements. I use a full SDK image to build, then copy only the compiled output to a slim runtime image. Our .NET API went from 2GB to 200MB. The build tools never ship to production."</blockquote>
+</div>
+
+<div class="qa-block">
+<h4>Q: How do containers communicate?</h4>
+<blockquote>"Containers on the same Docker network can reach each other by container name—Docker provides DNS resolution. In Compose, all services automatically join a network. My API connects to postgres at <code>Host=postgres</code> because that's the service name."</blockquote>
+</div>
+
+<h3>Advanced Questions</h3>
+
+<div class="qa-block">
+<h4>Q: How do you handle secrets in Docker?</h4>
+<blockquote>"Never bake secrets into images—they're in the layer history. For development, I use environment variables or .env files (gitignored). For production, I use Docker Swarm secrets or Kubernetes secrets, which mount as files."</blockquote>
+</div>
+
+<div class="qa-block">
+<h4>Q: How would you optimize a slow Docker build?</h4>
+<blockquote>"First, I'd check layer ordering—put stable dependencies before frequently-changing code. Then use .dockerignore to exclude unnecessary files. Multi-stage builds reduce context size. For CI, I'd use BuildKit's cache mounts."</blockquote>
+</div>
+`
+            },
+            {
+                title: "Quick Reference",
+                content: `
+<h3>Dockerfile Skeleton</h3>
+
+<div class="code-block">
+<pre><code># syntax=docker/dockerfile:1
+FROM base-image:tag AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM base-image:tag AS runtime
+WORKDIR /app
+COPY --from=build /app/dist .
+USER node
+EXPOSE 3000
+CMD ["node", "server.js"]</code></pre>
+</div>
+
+<h3>docker-compose.yml Skeleton</h3>
+
+<div class="code-block">
+<pre><code>version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - app-data:/app/data
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: \${DB_PASSWORD}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  app-data:
+  db-data:</code></pre>
+</div>
+
+<h3>Essential Commands</h3>
+
+<div class="diagram">
+<pre>
+┌──────────────────────────────────────────────────────────────┐
+│  DOCKER COMMAND CHEAT SHEET                                  │
+├──────────────────────────────────────────────────────────────┤
+│  IMAGES:                                                     │
+│    docker build -t name:tag .                                │
+│    docker images                                             │
+│    docker rmi image                                          │
+│    docker pull image                                         │
+│                                                              │
+│  CONTAINERS:                                                 │
+│    docker run -d -p 8080:80 --name app image                │
+│    docker ps [-a]                                            │
+│    docker stop/start/rm container                            │
+│    docker logs [-f] container                                │
+│    docker exec -it container bash                            │
+│                                                              │
+│  COMPOSE:                                                    │
+│    docker compose up [-d] [--build]                          │
+│    docker compose down [-v]                                  │
+│    docker compose logs [-f] [service]                        │
+│                                                              │
+│  CLEANUP:                                                    │
+│    docker system prune -a                                    │
+│    docker volume prune                                       │
+└──────────────────────────────────────────────────────────────┘
+</pre>
+</div>
+
+<h3>Your Action Items</h3>
+
+<div class="comparison-table">
+<table>
+<tr><th>Time</th><th>Focus</th></tr>
+<tr><td>Morning</td><td>Parts 1-5: Concepts + basic commands</td></tr>
+<tr><td>Midday</td><td>Part 8: Docker Compose (try the Arc Raiders example)</td></tr>
+<tr><td>Afternoon</td><td>Parts 9-10: Multi-stage builds + security</td></tr>
+<tr><td>Evening</td><td>Part 14: Practice explaining concepts out loud</td></tr>
+</table>
+</div>
+
+<div class="code-block">
+<pre><code># Exercise 1: Run nginx and map ports
+docker run -d -p 8080:80 nginx
+# Visit http://localhost:8080
+
+# Exercise 2: Build a custom image
+# Create a Dockerfile, build it, run it
+
+# Exercise 3: Spin up Arc Raiders with Compose
+docker compose up -d
+docker compose logs -f</code></pre>
+</div>
+
+<p style="text-align: center; font-size: 1.1rem; margin-top: 2rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--docker-blue);">
+Good luck! You've got the stored procedure optimization story down—now add "containerized our deployment with Docker" to your toolkit. 🐳
+</p>
+`
+            }
+        ];
+
+        let currentPart = 1;
+        const totalParts = tutorials.length;
+
+        function init() {
+            // Create navigation dots
+            const nav = document.getElementById('partsNav');
+            for (let i = 1; i <= totalParts; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'part-dot';
+                dot.textContent = i;
+                dot.onclick = () => goToPart(i);
+                nav.appendChild(dot);
+            }
+
+            // Check URL hash for initial part
+            const hash = window.location.hash;
+            if (hash) {
+                const part = parseInt(hash.replace('#', ''));
+                if (part >= 1 && part <= totalParts) {
+                    currentPart = part;
+                }
+            }
+
+            renderPart();
+        }
+
+        function goToPart(part) {
+            if (part >= 1 && part <= totalParts) {
+                currentPart = part;
+                window.location.hash = part;
+                renderPart();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function navigate(direction) {
+            goToPart(currentPart + direction);
+        }
+
+        function renderPart() {
+            const tutorial = tutorials[currentPart - 1];
+            
+            // Update content
+            document.getElementById('partTitle').innerHTML = 
+                `<span class="part-number">Part ${currentPart}</span>${tutorial.title}`;
+            document.getElementById('contentBody').innerHTML = tutorial.content;
+            
+            // Update progress
+            document.getElementById('progressFill').style.width = 
+                `${(currentPart / totalParts) * 100}%`;
+            document.getElementById('partIndicator').textContent = 
+                `Part ${currentPart} of ${totalParts}`;
+            
+            // Update navigation dots
+            document.querySelectorAll('.part-dot').forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                if (index + 1 === currentPart) {
+                    dot.classList.add('active');
+                } else if (index + 1 < currentPart) {
+                    dot.classList.add('completed');
+                }
+            });
+            
+            // Update nav buttons
+            document.getElementById('prevBtn').disabled = currentPart === 1;
+            document.getElementById('nextBtn').disabled = currentPart === totalParts;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') navigate(1);
+            if (e.key === 'ArrowLeft') navigate(-1);
+        });
+
+        // Handle hash changes
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash;
+            if (hash) {
+                const part = parseInt(hash.replace('#', ''));
+                if (part >= 1 && part <= totalParts && part !== currentPart) {
+                    currentPart = part;
+                    renderPart();
+                }
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bobby's Dev Room - Project Plan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --bg-code: #0d0d0d;
+            --accent-blue: #2496ed;
+            --accent-green: #00ff88;
+            --accent-purple: #a371f7;
+            --accent-yellow: #ffd93d;
+            --accent-red: #ff6b6b;
+            --accent-cyan: #56d4dd;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --border-color: #222222;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-sans: 'Space Grotesk', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html { font-size: 16px; scroll-behavior: smooth; }
+        
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Animated background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(36, 150, 237, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(36, 150, 237, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(36, 150, 237, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.4); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-family: var(--font-mono);
+            color: var(--accent-green);
+            font-size: 1.1rem;
+        }
+
+        .meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .meta-item .label {
+            color: var(--text-muted);
+        }
+
+        .meta-item .value {
+            font-family: var(--font-mono);
+            color: var(--accent-cyan);
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-family: var(--font-mono);
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 4rem;
+            padding-top: 2rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        h2::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 100%;
+            min-height: 30px;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-green));
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--accent-blue);
+            margin: 2rem 0 1rem;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Architecture Diagram */
+        .diagram {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .diagram pre {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--accent-cyan);
+            margin: 0;
+        }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            color: var(--accent-blue);
+            font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        td code {
+            font-family: var(--font-mono);
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            color: var(--accent-green);
+            font-size: 0.85em;
+        }
+
+        /* Phase Cards */
+        .phases {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .phase-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-blue);
+        }
+
+        .phase-card:nth-child(2)::before { background: var(--accent-green); }
+        .phase-card:nth-child(3)::before { background: var(--accent-purple); }
+        .phase-card:nth-child(4)::before { background: var(--accent-yellow); }
+
+        .phase-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateX(5px);
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .phase-time {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .phase-goal {
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .task-list li::before {
+            content: '○';
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-top: 0.2rem;
+        }
+
+        /* Chunks breakdown */
+        .chunks {
+            display: grid;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .chunk {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            align-items: center;
+        }
+
+        .chunk-id {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--accent-green);
+            background: var(--bg-code);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .chunk-desc {
+            color: var(--text-secondary);
+        }
+
+        .chunk-time {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .code-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .code-dots span:nth-child(1) { background: var(--accent-red); }
+        .code-dots span:nth-child(2) { background: var(--accent-yellow); }
+        .code-dots span:nth-child(3) { background: var(--accent-green); }
+
+        .code-lang {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .code-block pre {
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        .code-block code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        /* Folder structure */
+        .folder-structure {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .folder-structure .folder {
+            color: var(--accent-blue);
+        }
+
+        .folder-structure .file {
+            color: var(--accent-green);
+        }
+
+        .folder-structure .comment {
+            color: var(--text-muted);
+        }
+
+        /* Cost table */
+        .cost-total {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+        }
+
+        .cost-total td {
+            color: var(--accent-green);
+        }
+
+        /* Status badges */
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: rgba(255, 217, 61, 0.1);
+            color: var(--accent-yellow);
+        }
+
+        .status-progress {
+            background: rgba(36, 150, 237, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .status-complete {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--accent-green);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-green), var(--accent-purple));
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--bg-primary);
+            border: 2px solid var(--accent-blue);
+            border-radius: 50%;
+            transform: translateX(-5px);
+        }
+
+        .timeline-item:nth-child(2)::before { border-color: var(--accent-green); }
+        .timeline-item:nth-child(3)::before { border-color: var(--accent-purple); }
+        .timeline-item:nth-child(4)::before { border-color: var(--accent-yellow); }
+        .timeline-item:nth-child(5)::before { border-color: var(--accent-cyan); }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--accent-green);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.4rem; }
+            .meta { gap: 1rem; }
+            nav ul { gap: 0.25rem; }
+            nav a { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+            .phase-header { flex-direction: column; }
+            .chunk { grid-template-columns: 1fr; gap: 0.5rem; }
+            .diagram pre { font-size: 0.6rem; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+        ::selection { background: var(--accent-blue); color: white; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">🚀</div>
+            </div>
+            <h1>Bobby's Dev Room</h1>
+            <p class="subtitle">// Project Plan & Build Documentation</p>
+            
+            <div class="meta">
+                <div class="meta-item">
+                    <span class="label">Domain:</span>
+                    <span class="value">bobbysdevroom.io</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">Hosting:</span>
+                    <span class="value">Azure App Service</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">Timeline:</span>
+                    <span class="value">1-2 weeks</span>
+                </div>
+                <div class="meta-item">
+                    <span class="label">Status:</span>
+                    <span class="status status-progress">In Progress</span>
+                </div>
+            </div>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#tech-stack">Tech Stack</a></li>
+                <li><a href="#phases">Phases</a></li>
+                <li><a href="#database">Database</a></li>
+                <li><a href="#structure">Structure</a></li>
+                <li><a href="#design">Design</a></li>
+                <li><a href="#azure">Azure</a></li>
+                <li><a href="#progress">Progress</a></li>
+            </ul>
+        </nav>
+
+        <section id="overview">
+            <h2>Overview</h2>
+            <p>A portfolio website showcasing tutorials, projects, and coding solutions with an admin panel for content management. This document tracks the entire build process from planning to deployment.</p>
+            
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td>Purpose</td>
+                        <td>Developer portfolio + Tutorial hub + Project showcase</td>
+                    </tr>
+                    <tr>
+                        <td>Target Audience</td>
+                        <td>Potential employers, fellow developers, coding learners</td>
+                    </tr>
+                    <tr>
+                        <td>Key Features</td>
+                        <td>Interactive tutorials, LeetCode solutions browser, Arc Raiders dashboard, Admin panel</td>
+                    </tr>
+                    <tr>
+                        <td>Design Inspiration</td>
+                        <td><code>akis.studio</code> - Bold typography, smooth animations, dark theme</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2>Architecture</h2>
+            <p>The application follows a modern full-stack architecture with clear separation between the API backend and React frontend.</p>
+            
+            <div class="diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────────────────┐
+│                              AZURE                                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌──────────────────────┐      ┌──────────────────────┐                 │
+│  │   Azure App Service  │      │  Azure SQL Database  │                 │
+│  │                      │      │                      │                 │
+│  │  ┌────────────────┐  │      │  - Users             │                 │
+│  │  │  ASP.NET Core  │  │◄────►│  - Tutorials         │                 │
+│  │  │     API        │  │      │  - Projects          │                 │
+│  │  └───────┬────────┘  │      │  - LeetCode          │                 │
+│  │          │           │      │  - ArcRaiders        │                 │
+│  │  ┌───────▼────────┐  │      │  - Resume/Profile    │                 │
+│  │  │  React SPA     │  │      └──────────────────────┘                 │
+│  │  │  (Static)      │  │                                               │
+│  │  └────────────────┘  │      ┌──────────────────────┐                 │
+│  │                      │      │  Azure Blob Storage  │                 │
+│  └──────────────────────┘      │  - Resume PDFs       │                 │
+│                                │  - Tutorial files    │                 │
+│                                │  - Images            │                 │
+│                                └──────────────────────┘                 │
+└─────────────────────────────────────────────────────────────────────────┘
+</pre>
+            </div>
+        </section>
+
+        <section id="tech-stack">
+            <h2>Tech Stack</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Technology</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Frontend</td>
+                        <td><code>React 18 + TypeScript + Vite</code></td>
+                        <td>Fast, modern UI with type safety</td>
+                    </tr>
+                    <tr>
+                        <td>Animations</td>
+                        <td><code>Framer Motion + GSAP</code></td>
+                        <td>Smooth, professional animations</td>
+                    </tr>
+                    <tr>
+                        <td>Styling</td>
+                        <td><code>Tailwind CSS</code></td>
+                        <td>Utility-first, rapid development</td>
+                    </tr>
+                    <tr>
+                        <td>Backend</td>
+                        <td><code>ASP.NET Core 8 Web API</code></td>
+                        <td>Robust, performant API</td>
+                    </tr>
+                    <tr>
+                        <td>Database</td>
+                        <td><code>SQL Server (Azure SQL)</code></td>
+                        <td>Reliable data storage</td>
+                    </tr>
+                    <tr>
+                        <td>Auth</td>
+                        <td><code>ASP.NET Core Identity + JWT</code></td>
+                        <td>Secure authentication</td>
+                    </tr>
+                    <tr>
+                        <td>File Storage</td>
+                        <td><code>Azure Blob Storage</code></td>
+                        <td>PDFs, images, tutorial files</td>
+                    </tr>
+                    <tr>
+                        <td>Hosting</td>
+                        <td><code>Azure App Service</code></td>
+                        <td>Scalable cloud hosting</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="phases">
+            <h2>Phases</h2>
+            <p>The project is broken into four main phases, each with smaller manageable chunks.</p>
+            
+            <div class="phases">
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <span class="phase-title">Phase 1: Landing Page + About Me + Docker Tutorial</span>
+                        <span class="phase-time">⏱️ 3-4 days</span>
+                    </div>
+                    <p class="phase-goal">Goal: Get something live and impressive ASAP</p>
+                    <ul class="task-list">
+                        <li>Project scaffolding (API + React)</li>
+                        <li>Database schema design & migrations</li>
+                        <li>Landing page with animations (akis.studio style)</li>
+                        <li>Hero section with name/title</li>
+                        <li>Projects showcase grid</li>
+                        <li>About Me section with skills display</li>
+                        <li>Social links (GitHub, LinkedIn, Coming Soon for others)</li>
+                        <li>Resume display + PDF download</li>
+                        <li>Docker tutorial integration</li>
+                        <li>Deploy to Azure (staging)</li>
+                    </ul>
+                    
+                    <h4 style="color: var(--accent-green); margin-top: 1.5rem;">Chunk Breakdown</h4>
+                    <div class="chunks">
+                        <div class="chunk">
+                            <span class="chunk-id">1A</span>
+                            <span class="chunk-desc">Project scaffolding - empty ASP.NET Core API + React app</span>
+                            <span class="chunk-time">30 min</span>
+                        </div>
+                        <div class="chunk">
+                            <span class="chunk-id">1B</span>
+                            <span class="chunk-desc">Database setup - DbContext, entities, migrations</span>
+                            <span class="chunk-time">1 hour</span>
+                        </div>
+                        <div class="chunk">
+                            <span class="chunk-id">1C</span>
+                            <span class="chunk-desc">Landing page - Hero section only</span>
+                            <span class="chunk-time">1-2 hours</span>
+                        </div>
+                        <div class="chunk">
+                            <span class="chunk-id">1D</span>
+                            <span class="chunk-desc">Landing page - Projects grid section</span>
+                            <span class="chunk-time">1-2 hours</span>
+                        </div>
+                        <div class="chunk">
+                            <span class="chunk-id">1E</span>
+                            <span class="chunk-desc">Landing page - About preview + Skills</span>
+                            <span class="chunk-time">1-2 hours</span>
+                        </div>
+                        <div class="chunk">
+                            <span class="chunk-id">1F</span>
+                            <span class="chunk-desc">Landing page - Footer with social links</span>
+                            <span class="chunk-time">30 min</span>
+                        </div>
+                        <div class="chunk">
+                            <span class="chunk-id">1G</span>
+                            <span class="chunk-desc">API endpoints - GET projects, profile, tutorials</span>
+                            <span class="chunk-time">1 hour</span>
+                        </div>
+                        <div class="chunk">
+                            <span class="chunk-id">1H</span>
+                            <span class="chunk-desc">Connect React to API - Replace hardcoded data</span>
+                            <span class="chunk-time">1 hour</span>
+                        </div>
+                        <div class="chunk">
+                            <span class="chunk-id">1I</span>
+                            <span class="chunk-desc">About Me page - Full page with resume</span>
+                            <span class="chunk-time">1-2 hours</span>
+                        </div>
+                        <div class="chunk">
+                            <span class="chunk-id">1J</span>
+                            <span class="chunk-desc">Docker tutorial integration</span>
+                            <span class="chunk-time">30 min</span>
+                        </div>
+                        <div class="chunk">
+                            <span class="chunk-id">1K</span>
+                            <span class="chunk-desc">Deploy to Azure (staging)</span>
+                            <span class="chunk-time">1 hour</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <span class="phase-title">Phase 2: Admin Panel + Auth</span>
+                        <span class="phase-time">⏱️ 2-3 days</span>
+                    </div>
+                    <p class="phase-goal">Goal: Manage content without touching code</p>
+                    <ul class="task-list">
+                        <li>User authentication (register/login)</li>
+                        <li>Admin dashboard interface</li>
+                        <li>Tutorial management (add/edit/delete)</li>
+                        <li>About Me editor</li>
+                        <li>Resume PDF upload</li>
+                        <li>Project management</li>
+                        <li>Role-based authorization (Admin vs Public)</li>
+                        <li>Azure Blob Storage integration</li>
+                        <li>Protected API endpoints</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <span class="phase-title">Phase 3: Arc Raiders Dashboard</span>
+                        <span class="phase-time">⏱️ 2-3 days</span>
+                    </div>
+                    <p class="phase-goal">Goal: Showcase the game analytics project</p>
+                    <ul class="task-list">
+                        <li>Migrate Arc Raiders database to Azure SQL</li>
+                        <li>API endpoints for Arc Raiders data</li>
+                        <li>Interactive dashboard page</li>
+                        <li>Items browser with filtering</li>
+                        <li>Quest tracker</li>
+                        <li>Event timers</li>
+                        <li>Interactive maps</li>
+                        <li>Project showcase page</li>
+                    </ul>
+                </div>
+
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <span class="phase-title">Phase 4: LeetCode Solutions</span>
+                        <span class="phase-time">⏱️ 2 days</span>
+                    </div>
+                    <p class="phase-goal">Goal: Searchable collection of coding solutions</p>
+                    <ul class="task-list">
+                        <li>Database tables for problems/solutions</li>
+                        <li>Bulk import of existing 25 solutions</li>
+                        <li>Solutions browser page</li>
+                        <li>Filter by difficulty (Easy/Medium/Hard)</li>
+                        <li>Filter by topic (Arrays, Trees, DP, etc.)</li>
+                        <li>Search by name/number</li>
+                        <li>Solution detail page with syntax highlighting</li>
+                        <li>Explanation + complexity analysis</li>
+                        <li>Admin: Add new solutions</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="database">
+            <h2>Database Schema</h2>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="code-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="code-lang">SQL</span>
+                </div>
+<pre><code>-- Users & Auth
+Users (
+    Id, Username, Email, PasswordHash, Role, CreatedAt
+)
+
+-- Profile/Resume
+Profile (
+    Id, FullName, Title, Bio, Email, GitHub, LinkedIn, 
+    TwitterUrl, YouTubeUrl, TwitchUrl, ResumeUrl, UpdatedAt
+)
+
+Skills (
+    Id, Name, Category, Proficiency, SortOrder
+)
+
+Experience (
+    Id, Company, Title, StartDate, EndDate, Description, SortOrder
+)
+
+Education (
+    Id, Institution, Degree, Field, GraduationDate, Description
+)
+
+-- Content
+Tutorials (
+    Id, Title, Slug, Description, HtmlFilePath, ThumbnailUrl,
+    Category, IsPublished, CreatedAt, UpdatedAt
+)
+
+Projects (
+    Id, Title, Slug, Description, ThumbnailUrl, LiveUrl, 
+    GitHubUrl, Technologies, IsPublished, IsFeatured, SortOrder
+)
+
+-- LeetCode
+LeetCodeProblems (
+    Id, ProblemNumber, Title, Slug, Difficulty, 
+    Topics, Description, SolutionCode, Language,
+    Explanation, TimeComplexity, SpaceComplexity,
+    IsPublished, CreatedAt
+)
+
+-- Arc Raiders (existing tables)
+ArcRaiders_Items, ArcRaiders_Quests, ArcRaiders_Traders, 
+ArcRaiders_EventTimers, ArcRaiders_Maps, ArcRaiders_Arcs</code></pre>
+            </div>
+        </section>
+
+        <section id="structure">
+            <h2>Folder Structure</h2>
+            
+            <div class="code-block">
+                <div class="code-header">
+                    <div class="code-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="code-lang">Directory Tree</span>
+                </div>
+<pre><code class="folder-structure"><span class="folder">bobbys-dev-room/</span>
+├── <span class="folder">src/</span>
+│   ├── <span class="folder">BobbysDevRoom.Api/</span>           <span class="comment"># ASP.NET Core API</span>
+│   │   ├── <span class="folder">Controllers/</span>
+│   │   ├── <span class="folder">Services/</span>
+│   │   ├── <span class="folder">Data/</span>
+│   │   │   ├── <span class="folder">Entities/</span>
+│   │   │   ├── <span class="folder">Migrations/</span>
+│   │   │   └── <span class="file">AppDbContext.cs</span>
+│   │   ├── <span class="folder">DTOs/</span>
+│   │   ├── <span class="folder">Auth/</span>
+│   │   └── <span class="file">Program.cs</span>
+│   │
+│   └── <span class="folder">bobbys-dev-room-client/</span>      <span class="comment"># React Frontend</span>
+│       ├── <span class="folder">src/</span>
+│       │   ├── <span class="folder">components/</span>
+│       │   │   ├── <span class="folder">layout/</span>
+│       │   │   ├── <span class="folder">home/</span>
+│       │   │   ├── <span class="folder">about/</span>
+│       │   │   ├── <span class="folder">tutorials/</span>
+│       │   │   ├── <span class="folder">projects/</span>
+│       │   │   ├── <span class="folder">leetcode/</span>
+│       │   │   └── <span class="folder">admin/</span>
+│       │   ├── <span class="folder">pages/</span>
+│       │   ├── <span class="folder">hooks/</span>
+│       │   ├── <span class="folder">services/</span>            <span class="comment"># API calls</span>
+│       │   ├── <span class="folder">styles/</span>
+│       │   └── <span class="file">App.tsx</span>
+│       ├── <span class="folder">public/</span>
+│       │   └── <span class="folder">tutorials/</span>
+│       │       └── <span class="folder">docker/</span>
+│       │           └── <span class="file">index.html</span>
+│       └── <span class="file">package.json</span>
+│
+├── <span class="folder">docs/</span>
+│   └── <span class="file">PROJECT_PLAN.md</span>
+│
+├── <span class="file">.gitignore</span>
+├── <span class="file">README.md</span>
+└── <span class="file">BobbysDevRoom.sln</span></code></pre>
+            </div>
+        </section>
+
+        <section id="design">
+            <h2>Design Notes</h2>
+            
+            <h3>Landing Page Sections</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <strong>Hero</strong> - Full viewport, bold typography, subtle particle/gradient animation
+                </div>
+                <div class="timeline-item">
+                    <strong>Featured Projects</strong> - Horizontal scroll or staggered grid with hover effects
+                </div>
+                <div class="timeline-item">
+                    <strong>About Preview</strong> - Split layout with image/text, scroll-triggered animations
+                </div>
+                <div class="timeline-item">
+                    <strong>Skills</strong> - Animated bars or creative visualization
+                </div>
+                <div class="timeline-item">
+                    <strong>Contact/Social</strong> - Minimal footer with links
+                </div>
+            </div>
+
+            <h3>Animation Techniques</h3>
+            <ul class="task-list">
+                <li>Scroll-triggered reveals (Framer Motion + Intersection Observer)</li>
+                <li>Smooth page transitions</li>
+                <li>Magnetic buttons (cursor follows)</li>
+                <li>Text split animations (letters animate in)</li>
+                <li>Parallax scrolling on images</li>
+                <li>Custom cursor</li>
+                <li>Loading screen with logo animation</li>
+            </ul>
+
+            <h3>Color Palette</h3>
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>Element</th>
+                        <th>Color</th>
+                        <th>Preview</th>
+                    </tr>
+                    <tr>
+                        <td>Background</td>
+                        <td><code>#0a0a0a, #111111</code></td>
+                        <td><span style="display:inline-block;width:60px;height:20px;background:linear-gradient(90deg,#0a0a0a,#111111);border-radius:4px;"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Primary</td>
+                        <td><code>#2496ed</code></td>
+                        <td><span style="display:inline-block;width:60px;height:20px;background:#2496ed;border-radius:4px;"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Accent</td>
+                        <td><code>#00ff88</code></td>
+                        <td><span style="display:inline-block;width:60px;height:20px;background:#00ff88;border-radius:4px;"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Text Primary</td>
+                        <td><code>#ffffff</code></td>
+                        <td><span style="display:inline-block;width:60px;height:20px;background:#ffffff;border-radius:4px;border:1px solid #333;"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Text Secondary</td>
+                        <td><code>#888888</code></td>
+                        <td><span style="display:inline-block;width:60px;height:20px;background:#888888;border-radius:4px;"></span></td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="azure">
+            <h2>Azure Resources</h2>
+            
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>Resource</th>
+                        <th>SKU</th>
+                        <th>Est. Cost/Month</th>
+                    </tr>
+                    <tr>
+                        <td>App Service</td>
+                        <td><code>B1 Basic</code></td>
+                        <td>~$13</td>
+                    </tr>
+                    <tr>
+                        <td>Azure SQL</td>
+                        <td><code>Basic (2GB)</code></td>
+                        <td>~$5</td>
+                    </tr>
+                    <tr>
+                        <td>Blob Storage</td>
+                        <td><code>LRS</code></td>
+                        <td>~$1</td>
+                    </tr>
+                    <tr class="cost-total">
+                        <td><strong>Total</strong></td>
+                        <td></td>
+                        <td><strong>~$19/month</strong></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <p><em>Can start with free tier and scale up when needed</em></p>
+
+            <h3>Domain Setup</h3>
+            <ol style="color: var(--text-secondary); padding-left: 1.5rem;">
+                <li style="margin-bottom: 0.5rem;">Purchase <code>bobbysdevroom.io</code> from Namecheap or Google Domains (~$12/year)</li>
+                <li style="margin-bottom: 0.5rem;">Configure DNS to point to Azure App Service</li>
+                <li>Set up SSL certificate (free via Azure)</li>
+            </ol>
+        </section>
+
+        <section id="progress">
+            <h2>Build Progress</h2>
+            <p>This section will be updated as we complete each chunk.</p>
+            
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>Chunk</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                    <tr>
+                        <td><code>1A</code></td>
+                        <td>Project scaffolding</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><code>1B</code></td>
+                        <td>Database setup</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><code>1C</code></td>
+                        <td>Hero section</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><code>1D</code></td>
+                        <td>Projects grid</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><code>1E</code></td>
+                        <td>About + Skills</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><code>1F</code></td>
+                        <td>Footer</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><code>1G</code></td>
+                        <td>API endpoints</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><code>1H</code></td>
+                        <td>React + API connection</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><code>1I</code></td>
+                        <td>About Me page</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><code>1J</code></td>
+                        <td>Docker tutorial</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><code>1K</code></td>
+                        <td>Azure deployment</td>
+                        <td><span class="status status-pending">Pending</span></td>
+                        <td>-</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <footer>
+            <p>Bobby's Dev Room Project Plan • Built with 💻 and ☕</p>
+            <p style="margin-top: 0.5rem;">
+                <a href="https://github.com/yourusername" target="_blank">GitHub</a> • 
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
