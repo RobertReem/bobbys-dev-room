@@ -1,12 +1,12 @@
 /* prefixes: obj object, arr array, btn button, lst list, txt text, frm form, inp input, hdn heading, dn demo note, fn function */
 const fnDate=s=>new Date(s+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
 const objUsers={
-'rob@dailyrain.com':{nam:'Rob',adr:'123 Sample Street, Saline, MI (fake)',zon:8,map:'18A',
+'rob@dailyrain.com':{nam:'Rob',adr:'123 Sample Street, Saline, MI (fake)',zon:8,map:'SAL-3',
  apt:[['Holiday lighting installation','Wed, Nov 18, 2026, 8a-12p'],['2027 spring startup','Not scheduled yet']],
  inv:[['INV-1042','2027 Prepaid Startup and Winterization Package',145+22*8,'Due'],['INV-1007','Holiday lighting deposit',200,'Paid']],
  st:['2027-04-06','2027-04-08','2027-04-20','2027-04-22','2027-05-04','2027-05-06'],
  wn:['2027-10-05','2027-10-07','2027-10-19','2027-10-21','2027-11-02','2027-11-04']},
-'traven@lotusgardenscapes.com':{nam:'Traven',adr:'456 Placeholder Lane, Dexter, MI (fake)',zon:12,map:'7B',
+'traven@lotusgardenscapes.com':{nam:'Traven',adr:'456 Placeholder Lane, Dexter, MI (fake)',zon:12,map:'DEX-1',
  apt:[['Holiday lighting installation','Tue, Nov 24, 2026, 12p-4p'],['Irrigation repair visit','Thu, Dec 3, 2026, 8a-12p']],
  inv:[['INV-1055','2027 Prepaid Startup and Winterization Package',145+22*12,'Due'],['INV-1012','Landscape lighting service call',95,'Paid']],
  st:['2027-04-13','2027-04-15','2027-04-27','2027-04-29','2027-05-11','2027-05-13'],
