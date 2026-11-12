@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Daily Rain | Redesign Demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap">
+<link rel="stylesheet" href="style.css"></head><body>
+<header id="hdrMain"><a id="imgLogo" href="#secHero" aria-label="Daily Rain home">Daily Rain</a>
+<div><a id="btnClientPortal" href="login.html">Client portal</a><button id="btnMenu" aria-expanded="false" aria-controls="navOverlay">Menu</button></div></header>
+<nav id="navOverlay" aria-label="Main"><a href="#secServices">Services</a><a href="#secPrepaid">Prepaid packages</a><a href="#secPortal">Client portal</a><a href="#secGallery">Our work</a><a href="#secReviews">Reviews</a><a href="#secAbout">Join the team</a></nav>
+<main>
+<section id="secHero"><svg id="svgStrand" viewBox="0 0 1200 110" preserveAspectRatio="none" aria-hidden="true"><path id="pthStrand" d="M0,20 Q100,100 200,20 T400,20 T600,20 T800,20 T1000,20 T1200,20"/></svg>
+<div class="wrap"><div><h1>Lights on now. Sprinklers back by spring.</h1>
+<p>One local crew for your holiday lighting, landscape lighting and irrigation, all year.</p>
+<div class="acts"><button class="btn org" id="btnHolidayQuote" data-demo>Sign up for a Holiday Lighting Quote today!</button><button class="btn" id="btnRequestService" data-demo>Request service</button></div></div>
+<img id="imgHero" src="img/5.jpg" alt="Craftsman house with roofline and tree lights at dusk"></div></section>
+
+<section id="secServices" class="lt"><div class="wrap"><h2>What we take care of</h2>
+<article class="svc"><div><h3>Holiday lighting</h3><p>Designed, hung, maintained and taken down for you. Sign up now and your house is lit before the first snow.</p><button class="btn" id="btnSvcHoliday" data-demo>Get a quote</button></div><img class="pop" src="img/2.jpg" alt="Two-story house outlined in warm white holiday lights at night"></article>
+<article class="svc"><div><h3>Landscape lighting</h3><p>Light that shows off the stonework and the plantings, and makes the walk to your door feel safe.</p><button class="btn" id="btnSvcLandscape" data-demo>Plan my lighting</button></div><img class="pop" src="img/3.jpg" alt="Large home with landscape lighting at dusk"></article>
+<article class="svc"><div><h3>Irrigation</h3><p>Design and install, repair, wifi controllers, and seasonal startups and shutdowns, done right.</p><button class="btn" id="btnSvcIrrigation" data-demo>Talk to an irrigation tech</button></div><img class="pop" src="img/4.jpg" alt="Sprinkler heads watering a green lawn"></article>
+</div></section>
+
+<section id="secPrepaid"><div class="wrap"><h2>Prepay for startup and winterization</h2>
+<div class="pk"><div><h3>Startup or winterization on its own</h3><b>$95 + $17 per zone</b><p>Pay after the work is completed. Placeholder description.</p></div>
+<div class="big"><h3>2027 Prepaid Startup and Winterization Package</h3><b>$145 + $22 per zone</b><p>Placeholder description. Both visits at one prepaid price.</p><button class="btn" id="btnPrepaidSeason" data-demo>Prepay the package</button></div></div></div></section>
+
+<section id="secPortal" class="bl"><div class="wrap po"><div><h2>Your Daily Rain account, all in one place</h2><p>Sign in to manage your services with us. Demo only for now.</p>
+</div>
+<div id="modSchedule" hidden><div class="nx"><strong>Next visit</strong><br>Spring startup, April (placeholder)</div>
+<div class="seg"><button class="on" id="btnSchedStartup" type="button">Startup</button><button id="btnSchedShutdown" type="button">Shutdown</button></div>
+<input id="inpSchedDate" type="date" aria-label="Preferred date"><select id="selSchedWindow" aria-label="Time window"><option>Morning</option><option>Afternoon</option><option>Any time</option></select>
+<button class="btn org" id="btnSchedConfirm" data-demo>Request this visit</button></div>
+<div id="modLogin"><strong>Sign in</strong><input id="inpPortalEmail" type="email" placeholder="Email" aria-label="Email"><input id="inpPortalPassword" type="password" placeholder="Password" aria-label="Password"><button class="btn org" id="btnPortalLogin" data-go="login.html">Sign in</button></div></div></section>
+
+<section id="secGallery"><div class="wrap"><h2>Recent work</h2><div class="gl"><img class="pop" src="img/2.jpg" alt="Holiday lighting at night"><img class="pop" src="img/1.jpg" alt="Sprinklers running in front of a brick home"><img class="pop" src="img/3.jpg" alt="Landscape lighting at dusk"><img class="pop" src="img/4.jpg" alt="Lawn irrigation in action"><img class="pop" src="img/5.jpg" alt="Holiday lights on a gabled house"></div></div></section>
+
+<section id="secReviews" class="lt"><div class="wrap"><h2>What customers say</h2><div class="rv"><div><blockquote>“Placeholder review. Real reviews will be pulled in from our customer survey results.”<cite>Customer name, town</cite></blockquote></div><div><blockquote>“Another placeholder review about a startup that went smoothly.”<cite>Customer name, town</cite></blockquote></div></div></div></section>
+
+<section id="secAbout"><div class="wrap ab"><div class="fin"><h3>Financing available</h3><p>Spread the cost of a larger project into payments that fit. Placeholder terms.</p><button class="btn" id="btnFinanceApply" data-demo>See financing options</button></div>
+<div><h3>Join the team</h3><p>We are hiring. Placeholder text about crew roles, training and pay.</p><button class="btn org" id="btnApplyNow" data-demo>Apply now</button></div></div></section></main>
+<footer id="ftrMain"><div class="wrap"><div><strong>Daily Rain, Inc.</strong><br>Saline, Michigan</div><div>(000) 000-0000<br>Hours: placeholder</div></div></footer>
+<div id="tstDemo" role="status"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="app.js"></script></body></html>
