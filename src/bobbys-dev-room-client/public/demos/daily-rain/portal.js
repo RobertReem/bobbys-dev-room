@@ -1,7 +1,7 @@
 /* prefixes: obj object, arr array, btn button, lst list, txt text, frm form, inp input, hdn heading, dn demo note, fn function */
 const fnDate=s=>new Date(s+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
 const objUsers={
-'rob@dailyrain.com':{nam:'Rob',adr:'123 Sample Street, Saline, MI (fake)',zon:8,map:'18b',
+'rob@dailyrain.com':{nam:'Rob',adr:'123 Sample Street, Saline, MI (fake)',zon:8,map:'18A',
  apt:[['Holiday lighting installation','Wed, Nov 18, 2026, 8a-12p'],['2027 spring startup','Not scheduled yet']],
  inv:[['INV-1042','2027 Prepaid Startup and Winterization Package',145+22*8,'Due'],['INV-1007','Holiday lighting deposit',200,'Paid']],
  st:['2027-04-06','2027-04-08','2027-04-20','2027-04-22','2027-05-04','2027-05-06'],
@@ -17,7 +17,7 @@ if(frmLogin){
 frmLogin.onsubmit=e=>{e.preventDefault();const txtEml=document.getElementById('inpPortalEmail').value.trim().toLowerCase();
 if(objUsers[txtEml]&&document.getElementById('inpPortalPassword').value==='12345678'){try{sessionStorage.setItem('usr',txtEml)}catch(x){}location.href='portal.html'}
 else document.getElementById('txtLoginErr').textContent='That email or password was not recognized. Demo accounts only.'};
-document.getElementById('btnNewCustomer').onclick=()=>fnSay('Demo: the new customer sign-up comes in the next build.');
+document.getElementById('btnNewCustomer').onclick=()=>location.href='signup.html';
 }else{
 let txtUsr=null;try{txtUsr=sessionStorage.getItem('usr')}catch(x){}
 const objU=objUsers[txtUsr];
